@@ -79,13 +79,36 @@ jobs:
         env:
           TEST_LICENSE: ${{ secrets.TEST_LICENSE }}
           ARTIFACTORY_VERSION: ${{ matrix.artifactory }}
-        run: go test -run Integration -timeout 30m -v ./test/... -coverprofile=coverage.txt -covermode=count
+        run: go test -run Integration -timeout 30m -v ./test/...
+
+  test_coverage:
+    name: Test coverage
+    runs-on: ubuntu-latest
+    needs: unit-test
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Cache Go modules
+        uses: actions/cache@v2
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-build-${{ hashFiles('**/go.sum') }}
+
+      - name: Test
+        run: go test -short -timeout 10m -v ./... -coverprofile=unit.txt -covermode=count
+
+      - name: Test
+        env:
+          TEST_LICENSE: ${{ secrets.TEST_LICENSE }}
+          ARTIFACTORY_VERSION: latest
+        run: go test -run Integration -timeout 30m -v ./test/... -coverprofile=integration.txt -covermode=count
 
       - name: Upload coverage report to Codecov.io
         uses: codecov/codecov-action@v1.0.15
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.txt
+          files: ./unit.txt ./integration.txt
           name: test-coverage
 
   lint:
