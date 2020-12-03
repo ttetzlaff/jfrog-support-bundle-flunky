@@ -101,7 +101,7 @@ jobs:
         uses: codecov/codecov-action@v1.0.15
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./unit.txt ./integration.txt
+          files: ./unit.txt,./integration.txt
           name: test-coverage
 
   lint:
