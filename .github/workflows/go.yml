@@ -51,13 +51,6 @@ jobs:
       - name: Test
         run: go test -short -timeout 10m -v ./... -coverprofile=coverage.txt -covermode=count
 
-      - name: Upload coverage report to Codecov.io
-        uses: codecov/codecov-action@v1.0.15
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.txt
-          name: test-coverage
-
   integration-test:
     name: Integration test
     runs-on: ubuntu-latest
@@ -95,14 +88,14 @@ jobs:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-build-${{ hashFiles('**/go.sum') }}
 
-      - name: Test
+      - name: Unit tests
         run: go test -short -timeout 10m -v ./... -coverprofile=unit.txt -covermode=count
 
-      - name: Test
+      - name: Integration tests
         env:
           TEST_LICENSE: ${{ secrets.TEST_LICENSE }}
           ARTIFACTORY_VERSION: latest
-        run: go test -run Integration -timeout 30m -v ./test/... -coverprofile=integration.txt -covermode=count
+        run: go test -timeout 30m -v ./test/... -coverprofile=integration.txt -covermode=count
 
       - name: Upload coverage report to Codecov.io
         uses: codecov/codecov-action@v1.0.15
