@@ -57,7 +57,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.txt
           flags: unit-test
-          name: codecov-umbrella
+          name: unit-tests
 
   integration-test:
     name: Integration test
@@ -88,7 +88,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.txt
           flags: integration,${{ matrix.artifactory }}
-          name: codecov-umbrella
+          name: integration-tests
 
   lint:
     name: Lint
