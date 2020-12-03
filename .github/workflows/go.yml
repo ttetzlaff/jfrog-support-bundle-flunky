@@ -56,8 +56,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.txt
-          flags: unit-test
-          name: unit-tests
+          name: test-coverage
 
   integration-test:
     name: Integration test
@@ -87,8 +86,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.txt
-          flags: integration,${{ matrix.artifactory }}
-          name: integration-tests
+          name: test-coverage
 
   lint:
     name: Lint
